@@ -4,7 +4,6 @@ class Piece:
         self.color=color
         self.position=position
     
-
 class Pawn(Piece):
     
     def legal_move(self):
