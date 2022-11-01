@@ -142,22 +142,26 @@ class King(Piece):
     
     def legal_move(self):
         available_move=[]
-        if (self.position[0]+1) <=8:
-            available_move.append([self.position[0]+1,self.position[1]])
-        if (self.position[0]-1) >=1:
-            available_move.append([self.position[0]-1,self.position[1]])
-        if (self.position[1]+1) <=8:
-            available_move.append([self.position[0],self.position[1]+1])
-        if (self.position[1]-1) >=1:
-            available_move.append([self.position[0],self.position[1]-1])
-        if (self.position[0]+1) <=8 and (self.position[1]+1) <=8:
-            available_move.append([self.position[0]+1,self.position[1]+1])
-        if (self.position[0]+1) <=8 and (self.position[1]-1) >=1:
-            available_move.append([self.position[0]+1,self.position[1]-1])
-        if (self.position[0]-1) >=1 and (self.position[1]+1) <=8:
-            available_move.append([self.position[0]-1,self.position[1]+1])
-        if (self.position[0]-1) >=1 and (self.position[1]-1) >=1:
-            available_move.append([self.position[0]-1,self.position[1]-1])
+        x_move_plus=self.position[0]+1
+        x_move_minus=self.position[0]-1
+        y_move_plus=self.position[1]+1
+        y_move_minus=self.position[1]-1
+        if (x_move_plus) <=8:
+            available_move.append([x_move_plus,self.position[1]])
+        if (x_move_minus) >=1:
+            available_move.append([x_move_minus,self.position[1]])
+        if ( y_move_plus) <=8:
+            available_move.append([self.position[0], y_move_plus])
+        if (y_move_minus) >=1:
+            available_move.append([self.position[0],y_move_minus])
+        if (x_move_plus) <=8 and ( y_move_plus) <=8:
+            available_move.append([x_move_plus, y_move_plus])
+        if (x_move_plus) <=8 and (y_move_minus) >=1:
+            available_move.append([x_move_plus,y_move_minus])
+        if (x_move_minus) >=1 and ( y_move_plus) <=8:
+            available_move.append([x_move_minus, y_move_plus])
+        if (x_move_minus) >=1 and (y_move_minus) >=1:
+            available_move.append([x_move_minus,y_move_minus])
         return available_move
     
     def __str__(self):
