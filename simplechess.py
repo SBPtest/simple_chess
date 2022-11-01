@@ -189,7 +189,4 @@ def board():
     return playboard
 if __name__=="__main__":
     Board=board()
-    print (Board['g1'].legal_move())
-    
-    
-    
+    print (Board['h1'].legal_move())
