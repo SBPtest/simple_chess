@@ -75,7 +75,24 @@ class Bishop(Piece):
 class Knight(Piece):
     
     def legal_move(self):
-        pass
+        available_move=[]
+        if (self.position[0]+1)<=8 and (self.position[1]+2)<=8:
+            available_move.append([self.position[0]+1,self.position[1]+2])
+        if (self.position[0]+1)<=8 and (self.position[1]-2)>=1:
+            available_move.append([self.position[0]+1,self.position[1]-2])
+        if (self.position[0]+2)<=8 and (self.position[1]+1)<=8:
+            available_move.append([self.position[0]+2,self.position[1]+1])
+        if (self.position[0]+2)<=8 and (self.position[1]-1)>=1:
+            available_move.append([self.position[0]+2,self.position[1]-1])
+        if (self.position[0]-1)>=1 and (self.position[1]+2)<=8:
+            available_move.append([self.position[0]-1,self.position[1]+2])
+        if (self.position[0]-1)>=1 and (self.position[1]-3)>=1:
+            available_move.append([self.position[0]-1,self.position[1]-2])
+        if (self.position[0]-2)>=1 and (self.position[1]+1)<=8:
+            available_move.append([self.position[0]-2,self.position[1]+1])
+        if (self.position[0]-2)>=1 and (self.position[1]-1)>=1:
+            available_move.append([self.position[0]-2,self.position[1]-1])
+        return available_move
     
     def __str__(self):
         return f"{self.color} Knight in {self.position}"
@@ -170,3 +187,9 @@ def board():
     playboard['d8']=Queen('Black',[4,8])
     playboard['e8']=King('Black',[5,8])
     return playboard
+if __name__=="__main__":
+    Board=board()
+    print (Board['g1'].legal_move())
+    
+    
+    
