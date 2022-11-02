@@ -166,6 +166,34 @@ class King(Piece):
     def __str__(self):
         return f"{self.color} King in {self.position}"
 
+class Board:
+    file="abcdefgh"
+    rank="12345678"
+    board={(x+y):0 for x in file for y in rank}
+    for i in range(len(file)):
+        playboard[file[i]+'2']=Pawn('White',[i+1,2])
+        playboard[file[i]+'7']=Pawn('Black',[i+1,7])
+    playboard['a1']=Rook('White',[1,1])
+    playboard['h1']=Rook('White',[8.1])
+    playboard['b1']=Knight('White',[2,1])
+    playboard['g1']=Knight('White',[7,1])
+    playboard['c1']=Bishop('White',[3,1])
+    playboard['f1']=Bishop('White',[6,1])
+    playboard['d1']=Queen('White',[4,1])
+    playboard['e1']=King('White',[5,1])
+    playboard['a8']=Rook('Black',[1,8])
+    playboard['h8']=Rook('Black',[8,8])
+    playboard['b8']=Knight('Black',[2,8])
+    playboard['g8']=Knight('Black',[7,8])
+    playboard['c8']=Bishop('Black',[3,8])
+    playboard['f8']=Bishop('Black',[6,8])
+    playboard['d8']=Queen('Black',[4,8])
+    playboard['e8']=King('Black',[5,8])
+    
+    def parse(self,move):
+        pass
+
+'''   
 def board():
     file="abcdefgh"
     rank="12345678"
@@ -190,6 +218,23 @@ def board():
     playboard['d8']=Queen('Black',[4,8])
     playboard['e8']=King('Black',[5,8])
     return playboard
+
+def parse(move_input):
+    board=Board()
+    sides="White"
+    if len(move_input)==2:
+        
+    elif len(move_input)==3:
+        pass
+    elif len(move_input)==4:
+        pass
+    elif len(move_input)==5:
+        pass
+ '''
+
 if __name__=="__main__":
     Board=board()
     print (Board['h1'].legal_move())
+    
+    
+    
