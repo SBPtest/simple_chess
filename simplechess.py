@@ -191,8 +191,6 @@ class Board:
     '''
     "I would like to make this a custom dictionary with default initialization so that the ugly Chess.board.board['e4'] lose one of its board"
     '''
-    file="abcdefgh"
-    rank="12345678"
     
     def __init__(self):
         file="abcdefgh"
