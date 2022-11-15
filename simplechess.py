@@ -3,9 +3,6 @@ class Piece:
     def __init__(self,color,position):
         self.color=color
         self.position=position
-        
-    def _logo(self):
-        return f"."
     
 class Pawn(Piece):
     
@@ -21,6 +18,15 @@ class Pawn(Piece):
                 available_move.append([self.position[0],self.position[1]-2])
         return available_move
     
+    def capture(self):
+        available_capture=[]
+        if self.color=="White":
+            available_capture=[[self.position[0]+1,self.position[1]+1],[self.position[0]-1,self.position[1]+1]]
+        else:
+            available_capture=[[self.position[0]+1,self.position[1]-1],[self.position[0]-1,self.position[1]-1]]
+        
+        return available_capture
+                
     def _logo(self):
         return f"p"
     
@@ -48,6 +54,9 @@ class Rook(Piece):
                 break
             available_move.append([self.position[0],self.position[1]-i])
         return available_move
+    
+    def capture(self):
+        return self.legal_move()
     
     def _logo(self):
         return f"R"
@@ -77,6 +86,9 @@ class Bishop(Piece):
             available_move.append([self.position[0]-i,self.position[1]+i])
         return available_move
     
+    def capture(self):
+        return self.legal_move()
+    
     def _logo(self):
         return f"B"
     
@@ -104,6 +116,9 @@ class Knight(Piece):
         if (self.position[0]-2)>=1 and (self.position[1]-1)>=1:
             available_move.append([self.position[0]-2,self.position[1]-1])
         return available_move
+    
+    def capture(self):
+        return self.legal_move()
     
     def _logo(self):
         return f"N"
@@ -149,6 +164,9 @@ class Queen(Piece):
             available_move.append([self.position[0],self.position[1]-i])
         return available_move
     
+    def capture(self):
+        return self.legal_move()
+    
     def _logo(self):
         return f"Q"
     
@@ -181,6 +199,9 @@ class King(Piece):
             available_move.append([x_move_minus,y_move_minus])
         return available_move
     
+    def capture(self):
+        return self.legal_move()
+    
     def _logo(self):
         return f"K"
     
@@ -188,14 +209,25 @@ class King(Piece):
         return f"{self.color} King in {self.position}"
 
 class Board:
-    '''
-    "I would like to make this a custom dictionary with default initialization so that the ugly Chess.board.board['e4'] lose one of its board"
-    '''
+    """
+    I would like to make this a custom dictionary with default initialization so that the ugly Chess.board.board['e4'] lose one of its board
+    
+    """
+    
+    """
+    Class to represent the chess board :
+    
+    board: dict(square:typePiece)
+    should be filled with either None or Piece type aka child of Piece object: Pawn, Rook, Knight, Bishop, Queen and King
+    
+    print_board(): -->None
+    Print the board's configuration
+    """
     
     def __init__(self):
         file="abcdefgh"
         rank="12345678"
-        self.board={(x+y):Piece(None,None) for x in file for y in rank}
+        self.board={(x+y):None for x in file for y in rank}
         for i in range(len(file)):
             self.board[file[i]+'2']=Pawn('White',[i+1,2])
             self.board[file[i]+'7']=Pawn('Black',[i+1,7])
@@ -220,8 +252,14 @@ class Board:
         file="abcdefgh"
         rank="87654321"
         for y in rank:
-            print("|",self.board["a"+y]._logo(),"|",self.board["b"+y]._logo(),"|",self.board["c"+y]._logo(),"|",self.board["d"+y]._logo(),"|",self.board["e"+y]._logo(),"|",self.board["f"+y]._logo(),"|",self.board["g"+y]._logo(),"|",self.board["h"+y]._logo(),"|")
-  
+            buffer="| "
+            for x in file:
+                if self.board[x+y]==None:
+                    buffer += "  | "
+                else:
+                    buffer += (self.board[x+y]._logo()+" | ")
+            print(buffer)
+            
 class Chess:
     '''
     
@@ -232,6 +270,29 @@ class Chess:
     3. simplifying the ungodly amount of if else
     
     '''
+    """
+    This should handle input parsing, which is determining whether it's a move, capture, castle, promotion, or en passant
+    Also determine the state of the board i.e check, checkmate, stalemate.
+    
+    move(moves):
+    this is the main parser, will parse the type of move the piece will play, moves should be in modern chess notation, 
+    which should infers about which pieces should be moved. 
+    
+    In case of normal move, it also determine whether the piece is blocked (and basically other type of moves too)
+    
+    promotion(square):
+    square is the last 2 character in string, which should be parsed by Chess.move. Should only be accessed by Chess.move
+    
+    en_passant(square):
+    detect if en_passant is possible, then call the Pawn.capture() if it does. Should only be accessed by Chess.move
+    
+    capture(square):
+    call the Piece.capture() if possible. Should only be accessed by Chess.move
+    
+    castle:
+    play castling if possible. Should only be accessed by Chess.move
+
+    """
     
     def __init__(self):
         self.side="White"
@@ -266,8 +327,3 @@ class Chess:
             self.side="Black"
         else:
             self.side=="White"
-
-if __name__=="__main__":
-    Board=Board()
-    Board.print_board()
- 
