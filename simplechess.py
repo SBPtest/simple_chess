@@ -210,7 +210,7 @@ class King(Piece):
 
 class Board:
     """
-    I would like to make this a custom dictionary with default initialization so that the ugly Chess.board.board['e4'] lose one of its board
+    I would like to make this a custom dictionary with default initialization so that the ugly self.board.board[position] in object Chess lose one of its board
     
     """
     
@@ -298,32 +298,45 @@ class Chess:
         self.side="White"
         self.board=Board()
     
+    def check_empty_square(self,position):
+        if ("+" in position) or ("#" in position):
+            position=position[:len(position)-1] #this removes the check/mate mark
+        if len(position)>2 and ('=' not in position):
+            position=position[len(position)-2:] #example, Bd5, d5 is the square we want to check whether it's empty
+        elif len(position)>2 and ('=' in position):
+            position=position[:2]
+            #there's 2 type of promotion annotation, b8=Q and bxc8=Q, the x implies the square is not empty.
+        
+        if self.board.board[position] !=None:
+            return True
+        return False
+    
+    
+    def promotion(self,pieces,poslist):
+        # poslist should be converted from position input i.e e8 is converted into [5,8] in method self.move
+        #hopefully work
+        self.board.board[position]=pieces(self.side,poslist)
+        return
+
     def move(self,moves):
-        if len(moves)==2:
-            if self.side=="White":
-                pass
-            else:
-                pass
-            pass
-        elif len(moves)==3:
-            if self.side=="White":
-                pass
-            else:
-                pass
-            pass
-        elif len(moves)==4:
-            if self.side=="White":
-                pass
-            else:
-                pass
-            pass
-        elif len(moves)==5:
-            if self.side=="White":
-                pass
-            else:
-                pass
-            pass
+        if 'x' not in moves:
+                if self.check_empty_square(moves):
+                    print("illegal Move")
+                    return
+        if "=" in moves:
+            self.promotion()
+                
         if self.side=="White":
             self.side="Black"
         else:
-            self.side=="White"
+            self.side="White"
+        return
+
+if __name__=="__main__":
+    Board=Chess()
+    print(Board.side)
+    Board.move("a7")
+    print(Board.side)
+    Board.move("a6")
+    print(Board.side)
+ 
