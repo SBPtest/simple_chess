@@ -175,6 +175,11 @@ class Queen(Piece):
 
 class King(Piece):
     
+    def __init__(self,color,position):
+        super().__init__(color,position)
+        self.king_move=0
+        
+    
     def legal_move(self):
         available_move=[]
         x_move_plus=self.position[0]+1
@@ -308,24 +313,75 @@ class Chess:
             #there's 2 type of promotion annotation, b8=Q and bxc8=Q, the x implies the square is not empty.
         
         if self.board.board[position] !=None:
-            return True
-        return False
+            return False
+        return True
     
+    def capture_legality(self,position):
+        if ("+" in position) or ("#" in position):
+            position=position[:len(position)-1] #this removes the check/mate mark
+        if len(position)>2 and ('=' not in position):
+            position=position[len(position)-2:] #example, Bd5, d5 is the square we want to check whether it's empty
+        elif len(position)>2 and ('=' in position):
+            position=position[:2]
+        
+        if self.board.board[position].color==self.side:
+            return False
+        return True
     
-    def promotion(self,pieces,poslist):
+    def promotion(self, pieces, position, poslist):
         # poslist should be converted from position input i.e e8 is converted into [5,8] in method self.move
         #hopefully work
-        self.board.board[position]=pieces(self.side,poslist)
+        if pieces=="Q":
+            self.board.board[position]=Queen(self.side,poslist)
+        elif pieces=="R":
+            self.board.board[position]=Rook(self.side,poslist)
+        elif pieces=="B":
+            self.board.board[position]=Bishop(self.side,poslist)
+        elif pieces=="N":
+            self.board.board[position]=Knight(self.side,poslist)
+        return
+    
+    def castle(self,moves):
+        if self.side=="White":
+            if moves=="0-0" or moves=="0-0+":
+                self.board.board["g1"]=King(self.side,[7,1])
+                self.board.board["f1"]=Rook(self.side,[6,1])
+                self.board.board["e1"]=None
+                self.board.board["h1"]=None
+            else:
+                self.board.board["c1"]=King(self.side,[3,1])
+                self.board.board["d1"]=Rook(self.side,[4,1])
+                self.board.board["e1"]=None
+                self.board.board["a1"]=None
+        else:
+            if moves=="0-0" or moves=="0-0+":
+                self.board.board["g8"]=King(self.side,[7,8])
+                self.board.board["f8"]=Rook(self.side,[6,8])
+                self.board.board["e8"]=None
+                self.board.board["h8"]=None
+            else:
+                self.board.board["c8"]=King(self.side,[3,8])
+                self.board.board["d8"]=Rook(self.side,[4,8])
+                self.board.board["e8"]=None
+                self.board.board["a8"]=None    
+        return
+    
+    def capture(self,pos_start,pos_end):
+        self.board.board[pos_end]=self.board.board[pos_start]
+        self.board.board[pos_start]=None
         return
 
     def move(self,moves):
         if 'x' not in moves:
-                if self.check_empty_square(moves):
+                if !(self.check_empty_square(moves)):
                     print("illegal Move")
                     return
+        elif 'x' in moves:
+            if self.check_empty_square(moves) or self.capture_legality(moves):
+                print("illegal Move")
+                return
         if "=" in moves:
-            self.promotion()
-                
+            self.promotion("Q", 'e8', [5,8])
         if self.side=="White":
             self.side="Black"
         else:
@@ -335,8 +391,11 @@ class Chess:
 if __name__=="__main__":
     Board=Chess()
     print(Board.side)
-    Board.move("a7")
+    Board.move("a4")
     print(Board.side)
     Board.move("a6")
     print(Board.side)
- 
+    print(Board.board.board['e8'])
+    
+    
+    
